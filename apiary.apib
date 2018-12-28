@@ -883,37 +883,6 @@ type             |in,eq               | `documents?filter=type|eq|MONTHLY_STATEM
     + Attributes (object)
         + data (array[Document], fixed-type, required)
 
-## Create application [/my/applications]
-If the request was recognized as duplication, HTTP status code 200 and the *application* object created during the first related successful request is received.
-
-In other cases, you receive one of the following errors:
-| Status code | Code                  | Message                     |
-| ---         | ---                   | ---                         |
-| 400         | INVALID_REQUEST       | *Various messages possible* |
-| 500         | INTERNAL_SERVER_ERROR | *Various messages possible* |
-
-
-### Create application [POST]
-Create new *application* of particular type
-
-+ Request (application/json; charset=utf-8)
-    + Attributes (ApplicationRequest)
-
-
-+ Response 200(application/json; charset=utf-8)
-
-        Application was created
-
-    + Attributes (ApplicationResponse)
-
-
-+ Response 400(application/json; charset=utf-8)
-
-        There was an error processing request
-
-    + Attributes (Errors)
-
-
 
 # Group My history data contracts
 Set of resources to access and modify client's contracts.
@@ -1045,40 +1014,6 @@ Get prioritized list of possible installments that are available for repayment. 
         There was an error processing request
 
     + Attributes (Errors)
-
-
-## Revolving payment availability [/my/payments/revolvingPaymentAvailability]
-Client may pay his deffered payments by revolving loan, either by installment program or by drawing from balance. This resource provide information about possibility to use this payment method.
-
-Possible error codes:
-| Status code | Code                  | Message                     |
-| ---         | ---                   | ---                         |
-| 400         | INVALID_REQUEST       | *Various messages possible* |
-| 500         | INTERNAL_SERVER_ERROR | *Various messages possible* |
-
-### Revolving payment availability [POST]
-Check the availability to pay given Applications by revolving loan.
-
-+ Request (application/json; charset=utf-8)
-    + Attributes (RevolvingPaymentAvailabilityRequest)
-
-+ Response 200(application/json; charset=utf-8)
-
-        Payment possibility checked successfully
-
-    + Attributes (RevolvingPaymentAvailability)
-
-
-+ Request Wrong data (application/json; charset=utf-8)
-    + Attributes (RevolvingPaymentAvailabilityRequest)
-
-+ Response 422 (application/json; charset=utf-8)
-
-        There was an error processing request
-
-    + Attributes (Errors)
-
-
 
 
 # Group My Documents
@@ -1528,9 +1463,6 @@ Financing application.
     + `paidFromContractNumber`: `01-6010027378` (string, optional, nullable) - contract when application was paid by revolving loan
     + `completelyPaid`: `true` (boolean, optional, nullable) - information if this application is completely paid and there is no expected payment from client
     + `paymentAvailability` (PaymentAvailability, optional, nullable) - information about possibility to pay application (it could be blocked, f.e. "rozklad odkladu")
-    + `revolvingPaymentInfo` (object, optional, nullable) - information about revolving loan payment method (installments or balance)
-        + `availability` (RevolvingPaymentAvailability, optional, nullable) - information about possibility to pay application by revolving loan
-        + `application` (ApplicationBase, optional, nullable) - information about revolving payment application (Homer application)
 
 
 ## HistoryApplication (ApplicationBase)
@@ -1549,22 +1481,6 @@ Financing application.
     + `name`: `Mall.cz`(string, optional) - marketing name of eshop used in connection with application
     + `logoUrl`: `https://www.uloziste_obrazku_z_eshop.cz/763a8b72-a081-4baa-9f71-7b41153d5fed` (string, optional) - URL na logo eshopu
 
-
-## RevolvingPaymentAvailabilityRequest (object)
-+ `applications` (array[ApplicationId], fixed-type, required) - Applications of type `DEFERRED_PAYMENT` that will be financed by revolving loan
-
-
-## RevolvingPaymentAvailability (object)
-Information about possibility to pay application by revolving loan, either by installment program or by drawing from balance
-
-### Properties
-+ `availability` (enum, required)
-    + `AVAILABLE`
-    + `NOT_AVAILABLE`
-+ `reasons` (array[string], optional) - List of reasons.
-    Possible values in array: `UNDESIRABLE`, `TOO_LOW_AMOUNT`, `ALREADY_PAID`, `BLOCKED`, `OVERDUE`, `IN_REVOLVING_PAYMENT_PROCESS`.
-+ `suitableContracts` (array[string], fixed-type, optional) - list of suitable target revolving loan contract numbers (if available)
-
 ## PaymentAvailability (object)
 Information about possibility to pay application
 
@@ -1574,24 +1490,6 @@ Information about possibility to pay application
     + `NOT_AVAILABLE`
 + `reasons` (array[string], optional) - List of reasons.
     Possible values in array: `ALREADY_PAID`, `BLOCKED`, `IN_REVOLVING_PAYMENT_PROCESS`.
-
-## ApplicationRequest (object)
-Application request
-
-### Properties
-+ `applications` (array[ApplicationId], fixed-type, required) - Applications of type `DEFERRED_PAYMENT` that will be financed by revolving loan
-+ `type`: `INSTALLMENT` (enum, required) - Financing type
-    + `INSTALLMENT` - Pay in monthly installments ("rozklad odloěenżch nŠkupý")
-    + `BALANCE` - Pay by charging client's revolving loan (NOT SUPPORTED YET)
-+ `settingsInstallment` (object, optional) - Settings for INSTALLMENT Application type.
-    + `preferredInstallment` (Amount, optional) - Preferred repayment amount
-    + `productCode`: `a122ax` (string, optional) - Product code, this indicates previous calculation result
-    + `productSetCode`: `bc11523` (string, optional) - Product set code, this will limit further calculations
-+ `returnUrls` (ReturnUrls, required) - Collection of URLs used for redirection of a customer back to a Self care
-
-
-## ApplicationResponse (ApplicationBase)
-+ `redirectUrl`: `https://clientredirect.lymet.cz?applicationId=77d665d7-da44-402e-b7f7-6354d6076b32` (string, required) - URL where the client should be redirected after successfull creation of application.
 
 
 ## ReturnUrls (object)
