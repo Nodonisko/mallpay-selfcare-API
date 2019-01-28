@@ -459,6 +459,30 @@ Use this endpoing to query last account upgrade request's state.
     + Body
 
 
+## Notifications [/account/notifications]
+
+Handling push notifications for mobile app.
+
+### Subsribe new device [POST]    
+Subsribe new device for push notification (there could be multiple devices). Each device has player(user) ID.
+
++ Attributes (object)
+    + oneSignalUserId (string, required): `s5as4d-5a6s54d-5sa6-asd56` - One signal player ID
+    + deviceUuid (string, required): `deviceuuid1234556` - Device UUID
+    
++ Response 204
+    Subsribe to push notifications successfull
+
+### Unsubscribe device [DELETE]    
+Unsubscribe device from notifications.
+
++ Attributes (object)
+    + deviceUuid (string, required): `deviceuuid1234556` - Device UUID
+    
++ Response 204
+    Unsubscribe from push notifications successfull
+
+
 # Group My profile
 Resources for accessing and modifying user personal data.
 
